@@ -271,6 +271,67 @@ function initFormSender() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    // mobile-menu
+    const header = document.querySelector('.header');
+    const openMenuBtns = document.querySelectorAll('.open-menu');
+    const closeMenuBtns = document.querySelectorAll('.close-menu');
+    const menuList = document.querySelector('.menu__list');
+    const menuSubListWrapper = document.querySelectorAll('.menu__sub-list-wrapper');
+
+    openMenuBtns.forEach(function (openMenuBtn) {
+        openMenuBtn.addEventListener('click', function () {
+            menuOpen(header);
+        })
+    });
+
+    closeMenuBtns.forEach(function (closeMenuBtn) {
+        closeMenuBtn.addEventListener('click', function () {
+            menuClose(header);
+        })
+    });
+
+    if (window.innerWidth <= 1024) {
+        menuList.classList.add('accor-wrapper');
+        menuList.setAttribute('data-accordion-list', '');
+        for (let i = 0; i < menuSubListWrapper.length; i += 1) {
+            menuSubListWrapper[i].classList.add('accor-full');
+            menuSubListWrapper[i].closest('.menu__item').classList.add('accor');
+            menuSubListWrapper[i].querySelector('.menu__sub-list').setAttribute('data-accordion-content', '');
+            menuSubListWrapper[i].querySelector('.menu__sub-list').classList.add('accor-full-content');
+        }
+    } else {
+        menuList.classList.remove('accor-wrapper');
+        menuList.removeAttribute('data-accordion-list', '');
+        for (let i = 0; i > menuSubListWrapper.length; i += 1) {
+            menuSubListWrapper[i].classList.remove('accor-full');
+            menuSubListWrapper[i].closest('.menu__item').classList.remove('accor');
+            menuSubListWrapper[i].querySelector('.menu__sub-list').removeAttribute('data-accordion-content', '');
+            menuSubListWrapper[i].querySelector('.menu__sub-list').classList.remove('accor-full-content');
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 1024) {
+            menuList.classList.add('accor-wrapper');
+            menuList.setAttribute('data-accordion-list', '');
+            for (let i = 0; i > menuSubListWrapper.length; i += 1) {
+                menuSubListWrapper[i].classList.add('accor-full');
+                menuSubListWrapper[i].closest('.menu__item').classList.add('accor');
+                menuSubListWrapper[i].querySelector('.menu__sub-list').setAttribute('data-accordion-content', '');
+                menuSubListWrapper[i].querySelector('.menu__sub-list').classList.add('accor-full-content');
+            }
+        } else {
+            menuList.classList.remove('accor-wrapper');
+            menuList.removeAttribute('data-accordion-list', '');
+            for (let i = 0; i > menuSubListWrapper.length; i += 1) {
+                menuSubListWrapper[i].classList.remove('accor-full');
+                menuSubListWrapper[i].closest('.menu__item').classList.remove('accor');
+                menuSubListWrapper[i].querySelector('.menu__sub-list').removeAttribute('data-accordion-content', '');
+                menuSubListWrapper[i].querySelector('.menu__sub-list').classList.remove('accor-full-content');
+            }
+        }
+    });
+
     // accordion
     const ACCORDION_LIST = 'data-accordion-list'
     const ACCORDION_BUTTON = 'data-accordion-button'
@@ -291,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         handleClick(button) {
-            const innerSection = button.nextElementSibling
+            const innerSection = button.closest('.accor').querySelector('.accor-full');
             const isOpened = innerSection.classList.contains(SECTION_OPENED)
 
             if (isOpened) {
@@ -302,6 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         open(section) {
+            console.log(section);
             const accordion = section.querySelector(`[${ACCORDION_CONTENT}`).closest('.accor');
             const accordionContent = section.querySelector(`[${ACCORDION_CONTENT}`)
             const accordionList = accordionContent.querySelector(`[${ACCORDION_LIST}`)
@@ -365,36 +427,4 @@ document.addEventListener("DOMContentLoaded", function () {
             elem.querySelector('.accor-open').click();
         });
     }
-
-    // mobile-menu
-    const header = document.querySelector('.header');
-    const contraindications = document.querySelector('.contraindications');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const openMenuBtns = document.querySelectorAll('.open-menu');
-    const closeMenuBtns = document.querySelectorAll('.close-menu');
-    let contraindicationsHeight = contraindications.clientHeight;
-    let headerHeight = header.clientHeight;
-
-    mobileMenu.style.top = contraindicationsHeight + headerHeight + 'px';
-    mobileMenu.style.paddingBottom = contraindicationsHeight + headerHeight + 'px';
-
-    window.addEventListener('resize', () => {
-        contraindicationsHeight = contraindications.clientHeight;
-        headerHeight = header.clientHeight;
-
-        mobileMenu.style.top = contraindicationsHeight + headerHeight + 'px';
-        mobileMenu.style.paddingBottom = contraindicationsHeight + headerHeight + 'px';
-    });
-
-    openMenuBtns.forEach(function (openMenuBtn) {
-        openMenuBtn.addEventListener('click', function () {
-            menuOpen(header);
-        })
-    });
-
-    closeMenuBtns.forEach(function (closeMenuBtn) {
-        closeMenuBtn.addEventListener('click', function () {
-            menuClose(header);
-        })
-    });
 });
